@@ -146,7 +146,11 @@
                             <del class="price-old">$ 1980</del>
                         </div> <!-- price-wrap.// -->
                     </div>
+                    {% if product.stock <= 0 %}
+                    <h6 class="'text-danger"> OUT OF STOCK </h6>
+                    {% else %}
                     <a href="#" class="btn btn-block btn-success">Add to cart </a>
+                    {% endif %}
                 </figcaption>
             </figure>
         </div>
