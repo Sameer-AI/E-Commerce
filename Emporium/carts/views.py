@@ -1,11 +1,12 @@
-from itertools import product
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from Store.models import Product
+from Store.models import Product,Variation
 from .models import Cart, CartItem
 # Create your views here.
 
 def cart(request,total=0,quantity=0,cart_items=None):
-
+    tax=None
+    grand_total=None
     try:
         cart=Cart.objects.get(cart_id=_cart_id(request))
         cart_items=CartItem.objects.filter(cart=cart,is_active=True)
@@ -42,7 +43,26 @@ def _cart_id(request):
 
 
 def add_cart(request,product_id):
+    # get the values from the incoming get request
     product=Product.objects.get(id=product_id)
+    product_variation=[]
+
+    if request.method == 'POST':
+
+        for item in request.POST:
+            key=item
+            value=request.POST[key]
+            # color=request.POST['color']
+            # size=request.POST['size']
+
+            try:
+                variation=Variation.objects.get(product=product,variation_category__iexact=key,variation_value__iexact=value)
+                product_variation.append(variation)
+                
+            except:
+                
+
+                pass
 
     try:
         cart=Cart.objects.get(cart_id=_cart_id(request)) # get the cart using the session id of the user
